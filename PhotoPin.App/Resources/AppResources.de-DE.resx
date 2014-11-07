@@ -169,4 +169,20 @@
     <value>hilfe und feedback</value>
     <comment>About Page</comment>
   </data>
+  <data name="MessageBoxAlreadyPinned" xml:space="preserve">
+    <value>Sie haben das Bild bereits auf die Startseite angeheftet.</value>
+    <comment>MessageBox</comment>
+  </data>
+  <data name="MessageBoxInfo" xml:space="preserve">
+    <value>Information</value>
+    <comment>MessageBox</comment>
+  </data>
+  <data name="MessageBoxNoImageFound" xml:space="preserve">
+    <value>Das Bild konnte nicht geöffnet werden.</value>
+    <comment>MessageBox</comment>
+  </data>
+  <data name="MessageBoxWarning" xml:space="preserve">
+    <value>Warnung</value>
+    <comment>MessageBox</comment>
+  </data>
 </root>

@@ -15,6 +15,8 @@ namespace PhotoPin.App
     /// </summary>
     public class CustomUriMapper : UriMapperBase
     {
+        private const string PIN_AUTOMATION_PAGE = "PinAutomationPage";
+
         /// <summary>
         /// Maps the given URI.
         /// </summary>
@@ -31,7 +33,7 @@ namespace PhotoPin.App
             if ((tempUri.Contains("EditPhotoContent")) && (tempUri.Contains("FileId")))
             {
                 // Redirect to PhotoEdit.xaml.
-                mappedUri = tempUri.Replace("MainPage", "ImageInfoPage");
+                mappedUri = tempUri.Replace("MainPage", PIN_AUTOMATION_PAGE);
                 mappedUri = mappedUri.Replace("FileId", AppConstants.PARAM_FILE_TOKEN);
                 return new Uri(mappedUri, UriKind.Relative);
             }
@@ -42,7 +44,7 @@ namespace PhotoPin.App
             if ((tempUri.Contains("RichMediaEdit")) && (tempUri.Contains(AppConstants.PARAM_FILE_TOKEN)))
             {
                 // Redirect to RichMediaPage.xaml.
-                mappedUri = tempUri.Replace("MainPage", "ImageInfoPage");
+                mappedUri = tempUri.Replace("MainPage", PIN_AUTOMATION_PAGE);
                 return new Uri(mappedUri, UriKind.Relative);
             }
 
@@ -52,7 +54,7 @@ namespace PhotoPin.App
             if ((tempUri.Contains(AppConstants.PARAM_FILE_TOKEN)) && !(tempUri.Contains("RichMediaEdit")))
             {
                 // Redirect to PhotoPage.xaml.
-                mappedUri = tempUri.Replace("MainPage", "ImageInfoPage");
+                mappedUri = tempUri.Replace("MainPage", PIN_AUTOMATION_PAGE);
                 return new Uri(mappedUri, UriKind.Relative);
             }
 

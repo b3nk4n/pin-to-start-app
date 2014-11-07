@@ -19,6 +19,11 @@ namespace PhotoPin.App.Pages
             InitializeComponent();
 
             BuildLocalizedApplicationBar();
+
+            Loaded += (s, e) =>
+            {
+                CleanupSharedContentFolder();
+            };
         }
 
         /// <summary>
@@ -36,6 +41,11 @@ namespace PhotoPin.App.Pages
                 NavigationService.Navigate(new Uri("/Pages/AboutPage.xaml", UriKind.Relative));
             };
             ApplicationBar.MenuItems.Add(appBarAboutMenuItem);
+        }
+
+        private void CleanupSharedContentFolder()
+        {
+            // TODO: cleanup deprecated image copies in isolated storge.
         }
     }
 }

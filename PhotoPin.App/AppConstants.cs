@@ -20,5 +20,10 @@ namespace PhotoPin.App
         /// The placeholder string.
         /// </summary>
         public const string PARAM_FILE_TOKEN = "token";
+
+        /// <summary>
+        /// The placeholder string.
+        /// </summary>
+        public const string PARAM_FILE_NAME = "fileName";
     }
 }

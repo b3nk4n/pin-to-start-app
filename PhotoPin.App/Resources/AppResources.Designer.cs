@@ -124,6 +124,42 @@ namespace PhotoPin.App.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The photo is already pinned to your start page. ähnelt.
+        /// </summary>
+        public static string MessageBoxAlreadyPinned {
+            get {
+                return ResourceManager.GetString("MessageBoxAlreadyPinned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Information ähnelt.
+        /// </summary>
+        public static string MessageBoxInfo {
+            get {
+                return ResourceManager.GetString("MessageBoxInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The photo could not be opened. ähnelt.
+        /// </summary>
+        public static string MessageBoxNoImageFound {
+            get {
+                return ResourceManager.GetString("MessageBoxNoImageFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Warning ähnelt.
+        /// </summary>
+        public static string MessageBoxWarning {
+            get {
+                return ResourceManager.GetString("MessageBoxWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die more apps ähnelt.
         /// </summary>
         public static string MoreApps {

@@ -169,4 +169,20 @@
     <value>support and feedback</value>
     <comment>About Page</comment>
   </data>
+  <data name="MessageBoxAlreadyPinned" xml:space="preserve">
+    <value>The photo is already pinned to your start page.</value>
+    <comment>MessageBox</comment>
+  </data>
+  <data name="MessageBoxInfo" xml:space="preserve">
+    <value>Information</value>
+    <comment>MessageBox</comment>
+  </data>
+  <data name="MessageBoxNoImageFound" xml:space="preserve">
+    <value>The photo could not be opened.</value>
+    <comment>MessageBox</comment>
+  </data>
+  <data name="MessageBoxWarning" xml:space="preserve">
+    <value>Warning</value>
+    <comment>MessageBox</comment>
+  </data>
 </root>
