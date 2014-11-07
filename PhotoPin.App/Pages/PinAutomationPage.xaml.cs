@@ -34,6 +34,11 @@ namespace PhotoPin.App.Pages
             bool success = false;
             if (NavigationContext.QueryString != null)
             {
+                if (e.NavigationMode == NavigationMode.Back)
+                {
+                    BackOrTerminate();
+                }
+
                 //if (NavigationContext.QueryString.ContainsKey(AppConstants.PARAM_MEDIA_LIB_INDEX))
                 //{
                 //    var indexString = NavigationContext.QueryString[AppConstants.PARAM_MEDIA_LIB_INDEX];
@@ -79,11 +84,7 @@ namespace PhotoPin.App.Pages
                 if (!success)
                 {
                     MessageBox.Show(AppResources.MessageBoxNoImageFound, AppResources.MessageBoxWarning, MessageBoxButton.OK);
-                    if (NavigationService.CanGoBack)
-                        NavigationService.GoBack();
-                    else
-                        App.Current.Terminate();
-
+                    BackOrTerminate();
                     return;
                 }
             }
@@ -132,6 +133,14 @@ namespace PhotoPin.App.Pages
 
             return (image == null) ? null : new PinableImage(image);
 
+        }
+
+        private void BackOrTerminate()
+        {
+            if (NavigationService.CanGoBack)
+                NavigationService.GoBack();
+            else
+                App.Current.Terminate();
         }
 
         public MediaLibrary MediaLibrary
