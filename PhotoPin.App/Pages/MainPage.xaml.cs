@@ -13,6 +13,8 @@ namespace PhotoPin.App.Pages
 {
     public partial class MainPage : PhoneApplicationPage
     {
+        private bool _isInfoVisible = false;
+
         // Konstruktor
         public MainPage()
         {
@@ -24,6 +26,8 @@ namespace PhotoPin.App.Pages
             {
                 CleanupSharedContentFolder();
             };
+
+
         }
 
         /// <summary>
@@ -32,6 +36,7 @@ namespace PhotoPin.App.Pages
         private void BuildLocalizedApplicationBar()
         {
             ApplicationBar = new ApplicationBar();
+            ApplicationBar.Mode = ApplicationBarMode.Minimized;
             ApplicationBar.Opacity = 0.99f;
 
             // about
@@ -46,6 +51,22 @@ namespace PhotoPin.App.Pages
         private void CleanupSharedContentFolder()
         {
             // TODO: cleanup deprecated image copies in isolated storge.
+        }
+
+        private void ChoosePhotoClicked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void InfoArrowClicked(object sender, RoutedEventArgs e)
+        {
+            _isInfoVisible = !_isInfoVisible;
+
+            if (_isInfoVisible) {
+                VisualStateManager.GoToState(this, "InfoState", true);
+            } else {
+                VisualStateManager.GoToState(this, "NormalState", true);
+            }
         }
     }
 }

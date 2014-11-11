@@ -64,7 +64,6 @@ namespace PhotoPin.App.Pages
                         {
                             success = true;
                         }
-                        // TODO: make sure that after a pinning and a navigation back --> not try to pin again!!!
                     }
                 }
 

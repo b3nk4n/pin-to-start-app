@@ -6,47 +6,86 @@
     xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:conv="clr-namespace:PhoneKit.Framework.Conversion;assembly=PhoneKit.Framework"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
     mc:Ignorable="d"
     FontFamily="{StaticResource PhoneFontFamilyNormal}"
     FontSize="{StaticResource PhoneFontSizeNormal}"
     Foreground="{StaticResource PhoneForegroundBrush}"
     SupportedOrientations="Portrait" Orientation="Portrait">
+    
+    <phone:PhoneApplicationPage.Resources>
+        <conv:ToUpperCaseConverter x:Key="ToUpperCaseConverter" />
+        <ControlTemplate x:Key="EmptyButtonControlTemplate" TargetType="Button">
+            <Grid Margin="12" toolkit:TiltEffect.IsTiltEnabled="True" Background="{StaticResource PhoneBackgroundBrush}">
+                <ContentPresenter />
+            </Grid>
+        </ControlTemplate>
+    </phone:PhoneApplicationPage.Resources>
 
     <!--LayoutRoot ist das Stammraster, in dem alle anderen Seiteninhalte platziert werden-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
+    	<VisualStateManager.VisualStateGroups>
+    		<VisualStateGroup x:Name="PopupState">
+    			<VisualStateGroup.Transitions>
+    				<VisualTransition GeneratedDuration="0:0:0.5">
+    					<VisualTransition.GeneratedEasingFunction>
+    						<CubicEase EasingMode="EaseInOut"/>
+    					</VisualTransition.GeneratedEasingFunction>
+    				</VisualTransition>
+    			</VisualStateGroup.Transitions>
+    			<VisualState x:Name="NormalState"/>
+    			<VisualState x:Name="InfoState">
+    				<Storyboard>
+    					<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)" Storyboard.TargetName="SlideInInfoBox" d:IsOptimized="True"/>
+    					<DoubleAnimation Duration="0" To="0" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="ellipse" d:IsOptimized="True"/>
+    					<DoubleAnimation Duration="0" To="-180" Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.Rotation)" Storyboard.TargetName="button" d:IsOptimized="True"/>
+    				</Storyboard>
+    			</VisualState>
+    		</VisualStateGroup>
+    	</VisualStateManager.VisualStateGroups>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- HINWEIS ZUR LOKALISIERUNG:
-            Um die angezeigten Zeichenfolgen zu lokalisieren, kopieren Sie die Werte in
-            die richtig benannten Schlüssel in der Datei der neutralen Ressourcensprache der App (AppResources.resx), und
-            ersetzen Sie den hartcodierten Textwert zwischen den Anführungszeichen des Attributs
-            mit der Bindungsklausel, deren Pfad auf diesen Zeichenfolgennamen verweist.
-
-            Zum Beispiel:
-
-                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
-
-            Diese Bindung verweist auf die Zeichenfolgenressource der Vorlage mit der Bezeichnung "ApplicationTitle".
-
-            Werden auf der Registerkarte mit den Projekteigenschaften unterstützte Sprachen hinzugefügt, wird
-            pro Sprache eine neue resx-Datei erstellt. In dieser können die übersetzten Werte der
-            Zeichenfolgen der Benutzeroberfläche gespeichert werden. Die Bindung in diesen Beispielen führt dazu, dass der Wert der
-            Attribute aus der RESX-Datei entnommen wird, die
-            CurrentUICulture der App zur Laufzeit entspricht.
-         -->
-
         <!--TitlePanel enthält den Namen der Anwendung und den Seitentitel-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="MEINE ANWENDUNG" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="Seitenname" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}"/>
+            <TextBlock Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}, Converter={StaticResource ToUpperCaseConverter}}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
         </StackPanel>
 
         <!--ContentPanel - zusätzliche Inhalte hier platzieren-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-
+            <Button Margin="0,24,0,24" VerticalAlignment="Top" HorizontalAlignment="Center" Template="{StaticResource EmptyButtonControlTemplate}"
+                    Click="ChoosePhotoClicked">
+                <StackPanel Orientation="Horizontal">
+                    <Path Width="72" Margin="0,0,6,0" Height="72" Stretch="Fill" Fill="{StaticResource PhoneSubtleBrush}" Data="F1 M 18,40L 36,40L 36,58L 18,58L 18,40 Z M 40,58L 40,40L 58,40L 58,58L 40,58 Z M 40,36L 40,18L 58,18L 58,36L 40,36 Z M 29,36L 25,36L 25,29L 18,29L 18,25L 25,25L 25,18L 29,18L 29,25L 36,25L 36,29L 29,29L 29,36 Z "/>
+                    <TextBlock Text="choose a photo you would like to pin to your start screen..." Style="{StaticResource PhoneTextSubtleStyle}" FontWeight="Thin" FontSize="30" TextWrapping="Wrap"
+                               MaxWidth="342"/>
+                </StackPanel>
+                
+            </Button>
+            <Grid x:Name="SlideInInfoBox" Height="800" Background="{StaticResource PhoneBackgroundBrush}">
+                <Grid.RenderTransform>
+                    <CompositeTransform TranslateY="612" />
+                </Grid.RenderTransform>
+                <StackPanel>
+                    <Button x:Name="button" Template="{StaticResource EmptyButtonControlTemplate}" HorizontalAlignment="Right" RenderTransformOrigin="0.5,0.5"
+                            Click="InfoArrowClicked">
+                    	<Button.RenderTransform>
+                    		<CompositeTransform/>
+                    	</Button.RenderTransform>
+                        <Grid>
+                            <Ellipse x:Name="ellipse" Width="48" Height="48" Stroke="{StaticResource PhoneForegroundBrush}" StrokeThickness="4" RenderTransformOrigin="0.5,0.5" >
+                            	<Ellipse.RenderTransform>
+                            		<CompositeTransform/>
+                            	</Ellipse.RenderTransform>
+                            </Ellipse>
+                            <Path Width="20" Height="28" Stretch="Fill" Fill="{StaticResource PhoneForegroundBrush}" Data="F1 M 34,57L 42,57L 42,32.25L 52,42.25L 52,31.75L 38,17.75L 24,31.75L 24,42.25L 34,32.25L 34,57 Z "/>
+                        </Grid>
+                    </Button>
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 

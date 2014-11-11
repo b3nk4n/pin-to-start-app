@@ -88,7 +88,7 @@ namespace PhotoPin.App.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Photo-Pin ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Pin to start ähnelt.
         /// </summary>
         public static string ApplicationTitle {
             get {
