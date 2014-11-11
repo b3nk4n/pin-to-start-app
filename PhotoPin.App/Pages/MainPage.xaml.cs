@@ -8,12 +8,29 @@ using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
 using PhotoPin.App.Resources;
+using Microsoft.Phone.Tasks;
+using Microsoft.Xna.Framework.Media;
+using System.IO;
+using System.Windows.Threading;
 
 namespace PhotoPin.App.Pages
 {
     public partial class MainPage : PhoneApplicationPage
     {
         private bool _isInfoVisible = false;
+
+        /// <summary>
+        /// The photo chooser task.
+        /// </summary>
+        /// <remarks>Must be defined at class level to work properly in tombstoning.</remarks>
+        private static PhotoChooserTask photoTask = new PhotoChooserTask();
+
+        private static string fileNameToPin;
+
+        /// <summary>
+        /// Used for delayed pin, because there is an issue when we pin directly after the photo-task returns.
+        /// </summary>
+        private DispatcherTimer _delayedNavigaionTimer = new DispatcherTimer();
 
         // Konstruktor
         public MainPage()
@@ -27,7 +44,25 @@ namespace PhotoPin.App.Pages
                 CleanupSharedContentFolder();
             };
 
+            _delayedNavigaionTimer.Interval = TimeSpan.FromMilliseconds(100);
+            _delayedNavigaionTimer.Tick += (s, e) =>
+            {
+                _delayedNavigaionTimer.Stop();
 
+                var uriString = new Uri(string.Format("/Pages/PinAutomationPage.xaml?{0}={1}", AppConstants.PARAM_SELECTED_FILE_NAME, fileNameToPin), UriKind.Relative);
+                NavigationService.Navigate(uriString);
+            };
+
+            // init photo chooser task
+            photoTask.ShowCamera = true;
+            photoTask.Completed += (se, pr) =>
+            {
+                if (pr.Error != null || pr.TaskResult != TaskResult.OK)
+                    return;
+
+                fileNameToPin = Path.GetFileName(pr.OriginalFileName);
+                _delayedNavigaionTimer.Start();
+            };
         }
 
         /// <summary>
@@ -55,7 +90,7 @@ namespace PhotoPin.App.Pages
 
         private void ChoosePhotoClicked(object sender, RoutedEventArgs e)
         {
-
+            photoTask.Show();
         }
 
         private void InfoArrowClicked(object sender, RoutedEventArgs e)

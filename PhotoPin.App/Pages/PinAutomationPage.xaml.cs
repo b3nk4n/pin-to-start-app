@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
@@ -39,20 +36,6 @@ namespace PhotoPin.App.Pages
                     BackOrTerminate();
                 }
 
-                //if (NavigationContext.QueryString.ContainsKey(AppConstants.PARAM_MEDIA_LIB_INDEX))
-                //{
-                //    var indexString = NavigationContext.QueryString[AppConstants.PARAM_MEDIA_LIB_INDEX];
-
-                //    int index;
-                //    if (int.TryParse(indexString, out index))
-                //    {
-                //        var vm = ImageLibraryViewModel.Instance.GetByLibIndex(index);
-                //        vm.LoadExifData();
-                //        DataContext = vm;
-                //        success = true;
-                //    }
-                //}
-
                 if (NavigationContext.QueryString.ContainsKey(AppConstants.PARAM_FILE_TOKEN))
                 {
                     var token = NavigationContext.QueryString[AppConstants.PARAM_FILE_TOKEN];
@@ -61,6 +44,20 @@ namespace PhotoPin.App.Pages
                     if (image != null)
                     {
                         if(SaveAndPinImage(image))
+                        {
+                            success = true;
+                        }
+                    }
+                }
+
+                if (NavigationContext.QueryString.ContainsKey(AppConstants.PARAM_SELECTED_FILE_NAME))
+                {
+                    var selectedFileName = NavigationContext.QueryString[AppConstants.PARAM_SELECTED_FILE_NAME];
+
+                    var image = GetImageFromFileName(selectedFileName);
+                    if (image != null)
+                    {
+                        if (SaveAndPinImage(image))
                         {
                             success = true;
                         }
@@ -124,6 +121,24 @@ namespace PhotoPin.App.Pages
             try
             {
                 image = MediaLibrary.GetPictureFromToken(token);
+            }
+            catch (InvalidOperationException ioex)
+            {
+                Debug.WriteLine("Could not retrieve photo from library with error: " + ioex.Message);
+            }
+
+            return (image == null) ? null : new PinableImage(image);
+        }
+
+        private PinableImage GetImageFromFileName(string fileName)
+        {
+            Picture image = null;
+
+            try
+            {
+                image = (from photos in MediaLibrary.Pictures
+                        where photos.Name.Equals(fileName)
+                        select photos).First();
             }
             catch (InvalidOperationException ioex)
             {
