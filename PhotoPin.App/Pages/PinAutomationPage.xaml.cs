@@ -11,6 +11,7 @@ using PhotoPin.App.Model;
 using PhoneKit.Framework.Core.Storage;
 using PhoneKit.Framework.Tile;
 using PhoneKit.Framework.Core.Tile;
+using System.Collections.Generic;
 
 namespace PhotoPin.App.Pages
 {
@@ -132,20 +133,41 @@ namespace PhotoPin.App.Pages
 
         private PinableImage GetImageFromFileName(string fileName)
         {
-            Picture image = null;
+            IEnumerable<Picture> images = null;
 
             try
             {
-                image = (from photos in MediaLibrary.Pictures
-                        where photos.Name.Equals(fileName)
-                        select photos).First();
+                foreach (var pic in MediaLibrary.Pictures)
+                {
+                    if (pic.Name.StartsWith(fileName.Substring(0, 8)))
+                    {
+                        string name = pic.Name;
+                    }
+                }
+
+                images = (from photos in MediaLibrary.Pictures
+                          where photos.Name.Equals(fileName)
+                          select photos);
             }
             catch (InvalidOperationException ioex)
             {
                 Debug.WriteLine("Could not retrieve photo from library with error: " + ioex.Message);
             }
 
-            return (image == null) ? null : new PinableImage(image);
+            // second try, because sometime the file extenstion was not applied.
+            if (images == null || images.Count() == 0)
+            {
+                foreach (var pic in MediaLibrary.Pictures)
+                {
+                    if (pic.Name.Contains(fileName) || fileName.Contains(pic.Name))
+                    {
+                        return new PinableImage(pic);
+                    }
+                }
+                return null;
+            }
+
+            return new PinableImage(images.First());
 
         }
 

@@ -134,7 +134,7 @@
     <comment>AboutPage</comment>
   </data>
   <data name="ApplicationDescription" xml:space="preserve">
-    <value>Dieses Tool erweitert Windows Phone 8 um die Anzeige von Bildinformationen aus dem Bilder-Hub.</value>
+    <value>Dieses Tool erweitert den Windows Phone 8 Bilder-Hub mit der Funktion, Bilder auf die Startseite anzuheften.</value>
     <comment>AboutPage</comment>
   </data>
   <data name="ApplicationTitle" xml:space="preserve">
@@ -184,5 +184,33 @@
   <data name="MessageBoxWarning" xml:space="preserve">
     <value>Warnung</value>
     <comment>MessageBox</comment>
+  </data>
+  <data name="AppBarCreateTile" xml:space="preserve">
+    <value>Kachel erstellen</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="Info1" xml:space="preserve">
+    <value>Bibliothek öffnen und Bild auswählen</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="Info2" xml:space="preserve">
+    <value>Editier-Optionen auswählen</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="Info3Close" xml:space="preserve">
+    <value>' auswählen</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="Info3Open" xml:space="preserve">
+    <value>'</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="Info4" xml:space="preserve">
+    <value>Bild wird auf Startseite gepinnt</value>
+    <comment>MainPage</comment>
+  </data>
+  <data name="InfoChoosePhoto" xml:space="preserve">
+    <value>wählen Sie ein Bild aus, welches auf den Startbildschirm geheftet werden soll...</value>
+    <comment>MainPage</comment>
   </data>
 </root>

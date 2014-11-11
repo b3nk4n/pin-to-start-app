@@ -12,6 +12,8 @@ using Microsoft.Phone.Tasks;
 using Microsoft.Xna.Framework.Media;
 using System.IO;
 using System.Windows.Threading;
+using PhoneKit.Framework.Core.Storage;
+using PhoneKit.Framework.Core.Tile;
 
 namespace PhotoPin.App.Pages
 {
@@ -71,8 +73,16 @@ namespace PhotoPin.App.Pages
         private void BuildLocalizedApplicationBar()
         {
             ApplicationBar = new ApplicationBar();
-            ApplicationBar.Mode = ApplicationBarMode.Minimized;
             ApplicationBar.Opacity = 0.99f;
+
+            // add tile
+            ApplicationBarIconButton appBarTileButton = new ApplicationBarIconButton(new Uri("/Assets/AppBar/appbar.tiles.plus.png", UriKind.Relative));
+            appBarTileButton.Text = AppResources.AppBarCreateTile;
+            appBarTileButton.Click += (s, e) =>
+            {
+                photoTask.Show();
+            };
+            ApplicationBar.Buttons.Add(appBarTileButton);
 
             // about
             ApplicationBarMenuItem appBarAboutMenuItem = new ApplicationBarMenuItem(AppResources.AboutTitle);
@@ -85,7 +95,23 @@ namespace PhotoPin.App.Pages
 
         private void CleanupSharedContentFolder()
         {
-            // TODO: cleanup deprecated image copies in isolated storge.
+            var localFileNames = StorageHelper.GetFileNames(LiveTileHelper.SHARED_SHELL_CONTENT_PATH);
+
+            if (localFileNames != null)
+            {
+                foreach (var fileName in localFileNames)
+                {
+                    var navigationUri = new Uri(string.Format("/Pages/PinAutomationPage.xaml?{0}={1}", AppConstants.PARAM_FILE_NAME, fileName), UriKind.Relative);
+                    if (!LiveTileHelper.TileExists(navigationUri))
+                    {
+                        try
+                        {
+                            StorageHelper.DeleteFile(LiveTileHelper.SHARED_SHELL_CONTENT_PATH + fileName);
+                        }
+                        catch (Exception) { }
+                    }
+                }
+            }
         }
 
         private void ChoosePhotoClicked(object sender, RoutedEventArgs e)

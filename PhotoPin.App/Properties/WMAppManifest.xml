@@ -3,8 +3,20 @@
   <DefaultLanguage xmlns="" code="en-US" />
   <Languages xmlns="">
     <Language code="de-DE" />
+    <Language code="it-IT" />
+    <Language code="pt-BR" />
+    <Language code="pt-PT" />
+    <Language code="fr-FR" />
+    <Language code="id-ID" />
+    <Language code="pl-PL" />
+    <Language code="es-MX" />
+    <Language code="es-ES" />
+    <Language code="ru-RU" />
+    <Language code="cs-CZ" />
+    <Language code="zh-TW" />
+    <Language code="ja-JP" />
   </Languages>
-  <App xmlns="" ProductID="{f5b6ecf8-4f10-4ad7-822c-40b1a46a5d1a}" Title="Photo-Pin" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="PhotoPin.App author" Description="A simple photo hub extension app to add a pin functionality." Publisher="PhotoPin.App" PublisherID="{5cadafe9-bf98-49db-80fd-70805acdb573}">
+  <App xmlns="" ProductID="{f5b6ecf8-4f10-4ad7-822c-40b1a46a5d1a}" Title="@AppResLib.dll,-100" RuntimeType="Silverlight" Version="1.0.0.0" Genre="apps.normal" Author="PhotoPin.App author" Description="A simple photo hub extension app to add a pin functionality." Publisher="PhotoPin.App" PublisherID="{5cadafe9-bf98-49db-80fd-70805acdb573}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
@@ -18,7 +30,7 @@
           <SmallImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileSmall.png</SmallImageURI>
           <Count>0</Count>
           <BackgroundImageURI IsRelative="true" IsResource="false">Assets\Tiles\FlipCycleTileMedium.png</BackgroundImageURI>
-          <Title>Photo-Pin</Title>
+          <Title>@AppResLib.dll,-200</Title>
           <BackContent>
           </BackContent>
           <BackBackgroundImageURI>

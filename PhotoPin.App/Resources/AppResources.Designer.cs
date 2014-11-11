@@ -70,6 +70,15 @@ namespace PhotoPin.App.Resources {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die create tile ähnelt.
+        /// </summary>
+        public static string AppBarCreateTile {
+            get {
+                return ResourceManager.GetString("AppBarCreateTile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die by Benjamin Sautermeister ähnelt.
         /// </summary>
         public static string ApplicationAuthor {
@@ -79,7 +88,7 @@ namespace PhotoPin.App.Resources {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die This app extends the Photos-Hub of Windows Phone 8 with new capabilities to get image information. ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die This app extends the Photos-Hub of Windows Phone 8 with the capability to pin photos to your start screen. ähnelt.
         /// </summary>
         public static string ApplicationDescription {
             get {
@@ -120,6 +129,60 @@ namespace PhotoPin.App.Resources {
         public static string FeedbackEmail {
             get {
                 return ResourceManager.GetString("FeedbackEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Open your library and select an image ähnelt.
+        /// </summary>
+        public static string Info1 {
+            get {
+                return ResourceManager.GetString("Info1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select Edit options ähnelt.
+        /// </summary>
+        public static string Info2 {
+            get {
+                return ResourceManager.GetString("Info2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die &apos; ähnelt.
+        /// </summary>
+        public static string Info3Close {
+            get {
+                return ResourceManager.GetString("Info3Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die Select &apos; ähnelt.
+        /// </summary>
+        public static string Info3Open {
+            get {
+                return ResourceManager.GetString("Info3Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die The photo will be pinned to start ähnelt.
+        /// </summary>
+        public static string Info4 {
+            get {
+                return ResourceManager.GetString("Info4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die choose a photo you would like to pin to your start screen... ähnelt.
+        /// </summary>
+        public static string InfoChoosePhoto {
+            get {
+                return ResourceManager.GetString("InfoChoosePhoto", resourceCulture);
             }
         }
         
