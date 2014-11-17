@@ -139,7 +139,7 @@ namespace PhotoPin.App.Pages
             {
                 foreach (var pic in MediaLibrary.Pictures)
                 {
-                    if (pic.Name.StartsWith(fileName.Substring(0, 8)))
+                    if (pic.Name.ToLower() == fileName.ToLower())
                     {
                         string name = pic.Name;
                     }
