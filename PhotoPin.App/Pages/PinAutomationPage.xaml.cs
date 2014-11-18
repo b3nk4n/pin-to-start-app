@@ -12,6 +12,7 @@ using PhoneKit.Framework.Core.Storage;
 using PhoneKit.Framework.Tile;
 using PhoneKit.Framework.Core.Tile;
 using System.Collections.Generic;
+using System.IO;
 
 namespace PhotoPin.App.Pages
 {
@@ -90,7 +91,7 @@ namespace PhotoPin.App.Pages
         private bool SaveAndPinImage(PinableImage image)
         {
             var imagePath = string.Format("{0}{1}", LiveTileHelper.SHARED_SHELL_CONTENT_PATH, image.FullName);
-            if (StorageHelper.SaveFileFromStream(imagePath, image.FullImageStream))
+            if (StorageHelper.SaveFileFromStream(imagePath, image.ImageStream))
             {
                 var imageUri = new Uri(StorageHelper.ISTORAGE_SCHEME + imagePath, UriKind.Absolute);
 
@@ -133,21 +134,32 @@ namespace PhotoPin.App.Pages
 
         private PinableImage GetImageFromFileName(string fileName)
         {
-            IEnumerable<Picture> images = null;
-
             try
             {
-                foreach (var pic in MediaLibrary.Pictures)
+                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
+
+                // replace 'filename(1)' with 'filename'
+                if (fileNameWithoutExt.EndsWith(")"))
                 {
-                    if (pic.Name.ToLower() == fileName.ToLower())
+                    if (fileNameWithoutExt.Length > 3 && fileNameWithoutExt[fileNameWithoutExt.Length - 3] == '(')
                     {
-                        string name = pic.Name;
+                        fileNameWithoutExt = fileNameWithoutExt.Substring(0, fileNameWithoutExt.Length - 3);
                     }
                 }
 
-                images = (from photos in MediaLibrary.Pictures
-                          where photos.Name.Equals(fileName)
-                          select photos);
+                foreach (var pic in MediaLibrary.Pictures)
+                {
+                    var picFileNameWithoutExtension = Path.GetFileNameWithoutExtension(pic.Name);
+
+                    var picFileNameWithoutExtensionLower = picFileNameWithoutExtension.ToLower();
+                    var fileNameWithoutExtLower = fileNameWithoutExt.ToLower();
+
+                    if (picFileNameWithoutExtensionLower == fileNameWithoutExtLower ||
+                        picFileNameWithoutExtensionLower.Substring(0, Math.Max(1, picFileNameWithoutExtensionLower.Length - 3)) == fileNameWithoutExtLower)
+                    {
+                        return new PinableImage(pic);
+                    }
+                }
             }
             catch (InvalidOperationException ioex)
             {
@@ -155,20 +167,15 @@ namespace PhotoPin.App.Pages
             }
 
             // second try, because sometime the file extenstion was not applied.
-            if (images == null || images.Count() == 0)
+            // TODO: check if still necessary?!?
+            foreach (var pic in MediaLibrary.Pictures)
             {
-                foreach (var pic in MediaLibrary.Pictures)
+                if (pic.Name.Contains(fileName) || fileName.Contains(pic.Name))
                 {
-                    if (pic.Name.Contains(fileName) || fileName.Contains(pic.Name))
-                    {
-                        return new PinableImage(pic);
-                    }
+                    return new PinableImage(pic);
                 }
-                return null;
             }
-
-            return new PinableImage(images.First());
-
+            return null;
         }
 
         private void BackOrTerminate()

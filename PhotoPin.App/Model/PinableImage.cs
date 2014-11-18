@@ -12,9 +12,7 @@ namespace PhotoPin.App.Model
 
         public PinableImage(Picture image)
         {
-            _image = image;
-
-            
+            _image = image;     
         }
 
         public Stream ThumbnailImageStream
@@ -95,6 +93,16 @@ namespace PhotoPin.App.Model
             {
                 return Path.GetExtension(_image.GetPath()).Replace(".", string.Empty).ToUpper();
             }
+        }
+
+        public double Width
+        {
+            get { return _image.Width; }
+        }
+
+        public double Height
+        {
+            get { return _image.Height; }
         }
     }
 }
