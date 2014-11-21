@@ -13,6 +13,7 @@ using PhoneKit.Framework.Tile;
 using PhoneKit.Framework.Core.Tile;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Media.Imaging;
 
 namespace PhotoPin.App.Pages
 {
@@ -94,18 +95,16 @@ namespace PhotoPin.App.Pages
             if (StorageHelper.SaveFileFromStream(imagePath, image.ImageStream))
             {
                 var imageUri = new Uri(StorageHelper.ISTORAGE_SCHEME + imagePath, UriKind.Absolute);
-
-                var tile = new FlipTileData();
-                tile = new FlipTileData()
+                var tile = new CycleTileData()
                 {
                     SmallBackgroundImage = imageUri,
-                    WideBackgroundImage = imageUri,
-                    BackgroundImage = imageUri,
+                    CycleImages = new List<Uri>() { imageUri, imageUri }
                 };
+
                 var navigationUri = new Uri(string.Format("/Pages/PinAutomationPage.xaml?{0}={1}", AppConstants.PARAM_FILE_NAME, image.FullName), UriKind.Relative);
                 if (!LiveTileHelper.TileExists(navigationUri))
                 {
-                    LiveTilePinningHelper.PinOrUpdateTile(navigationUri, tile);
+                    LiveTilePinningHelper.PinOrUpdateTile(navigationUri, tile, true);
                 }
                 else
                 {
@@ -136,8 +135,8 @@ namespace PhotoPin.App.Pages
         {
             try
             {
-                var fileNameWithoutExt = Path.GetFileNameWithoutExtension(fileName);
-
+                var fileNameWithoutExt = ExtractFileExtension(fileName);
+                
                 // replace 'filename(1)' with 'filename'
                 if (fileNameWithoutExt.EndsWith(")"))
                 {
@@ -149,7 +148,7 @@ namespace PhotoPin.App.Pages
 
                 foreach (var pic in MediaLibrary.Pictures)
                 {
-                    var picFileNameWithoutExtension = Path.GetFileNameWithoutExtension(pic.Name);
+                    var picFileNameWithoutExtension = ExtractFileExtension(pic.Name);
 
                     var picFileNameWithoutExtensionLower = picFileNameWithoutExtension.ToLower();
                     var fileNameWithoutExtLower = fileNameWithoutExt.ToLower();
@@ -176,6 +175,23 @@ namespace PhotoPin.App.Pages
                 }
             }
             return null;
+        }
+
+        /// <summary>
+        /// Replacement for Path.GetFileNameWithoutExtension(), which throw "ArgumentException: Illegal characters in path".
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <returns></returns>
+        private string ExtractFileExtension(string fileName)
+        {
+            var extensionStartIndex = fileName.LastIndexOf('.');
+
+            if (extensionStartIndex != -1)
+            {
+                fileName = fileName.Substring(0, extensionStartIndex);
+            }
+
+            return fileName;
         }
 
         private void BackOrTerminate()
