@@ -138,13 +138,7 @@ namespace PhotoPin.App.Pages
                 var fileNameWithoutExt = ExtractFileExtension(fileName);
                 
                 // replace 'filename(1)' with 'filename'
-                if (fileNameWithoutExt.EndsWith(")"))
-                {
-                    if (fileNameWithoutExt.Length > 3 && fileNameWithoutExt[fileNameWithoutExt.Length - 3] == '(')
-                    {
-                        fileNameWithoutExt = fileNameWithoutExt.Substring(0, fileNameWithoutExt.Length - 3);
-                    }
-                }
+                fileNameWithoutExt = RemoveImageCopyCounter(fileNameWithoutExt);
 
                 foreach (var pic in MediaLibrary.Pictures)
                 {
@@ -177,6 +171,18 @@ namespace PhotoPin.App.Pages
             return null;
         }
 
+        private static string RemoveImageCopyCounter(string fileNameWithoutExt)
+        {
+            if (fileNameWithoutExt.EndsWith(")"))
+            {
+                if (fileNameWithoutExt.Length > 3 && fileNameWithoutExt[fileNameWithoutExt.Length - 3] == '(')
+                {
+                    fileNameWithoutExt = fileNameWithoutExt.Substring(0, fileNameWithoutExt.Length - 3);
+                }
+            }
+            return fileNameWithoutExt;
+        }
+
         /// <summary>
         /// Replacement for Path.GetFileNameWithoutExtension(), which throw "ArgumentException: Illegal characters in path".
         /// </summary>
@@ -188,7 +194,7 @@ namespace PhotoPin.App.Pages
 
             if (extensionStartIndex != -1)
             {
-                fileName = fileName.Substring(0, extensionStartIndex);
+                fileName = fileName.Substring(0, Math.Max(1, extensionStartIndex));
             }
 
             return fileName;
