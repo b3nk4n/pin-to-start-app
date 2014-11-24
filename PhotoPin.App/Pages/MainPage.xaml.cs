@@ -80,7 +80,16 @@ namespace PhotoPin.App.Pages
             appBarTileButton.Text = AppResources.AppBarCreateTile;
             appBarTileButton.Click += (s, e) =>
             {
-                photoTask.Show();
+                try
+                {
+                    photoTask.Show();
+                }
+                catch (InvalidOperationException)
+                {
+                    // suppress multiple Show() calls:
+                    // reported via Email error report (24.11.2014)
+                }
+                
             };
             ApplicationBar.Buttons.Add(appBarTileButton);
 
