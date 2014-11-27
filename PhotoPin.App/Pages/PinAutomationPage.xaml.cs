@@ -135,24 +135,14 @@ namespace PhotoPin.App.Pages
         {
             try
             {
-                var fileNameWithoutExt = ExtractFileExtension(fileName);
-                
-                // replace 'filename(1)' with 'filename'
-                fileNameWithoutExt = RemoveImageCopyCounter(fileNameWithoutExt);
-
                 foreach (var pic in MediaLibrary.Pictures)
                 {
-                    var picFileNameWithoutExtension = ExtractFileExtension(pic.Name);
-
-                    var picFileNameWithoutExtensionLower = picFileNameWithoutExtension.ToLower();
-                    var fileNameWithoutExtLower = fileNameWithoutExt.ToLower();
-
-                    if (picFileNameWithoutExtensionLower == fileNameWithoutExtLower ||
-                        picFileNameWithoutExtensionLower.Substring(0, Math.Max(1, picFileNameWithoutExtensionLower.Length - 3)) == fileNameWithoutExtLower)
+                    if (pic.Name == fileName)
                     {
                         return new PinableImage(pic);
                     }
                 }
+                Debug.WriteLine("pic: " + fileName);
             }
             catch (InvalidOperationException ioex)
             {
@@ -163,7 +153,9 @@ namespace PhotoPin.App.Pages
             // TODO: check if still necessary?!?
             foreach (var pic in MediaLibrary.Pictures)
             {
-                if (pic.Name.Contains(fileName) || fileName.Contains(pic.Name))
+                var nameWithoutCounter = RemoveImageCopyCounter(fileName);
+                if (pic.Name.Contains(fileName) || fileName.Contains(pic.Name) ||
+                    pic.Name.Contains(nameWithoutCounter) || pic.Name.Contains(nameWithoutCounter))
                 {
                     return new PinableImage(pic);
                 }
@@ -171,16 +163,24 @@ namespace PhotoPin.App.Pages
             return null;
         }
 
-        private static string RemoveImageCopyCounter(string fileNameWithoutExt)
+        private static string RemoveImageCopyCounter(string fileName)
         {
-            if (fileNameWithoutExt.EndsWith(")"))
+            if (fileName.Length <= 3)
+                return fileName;
+
+            var bracketsStart = fileName.IndexOf('(');
+            var bracketsEnd = fileName.IndexOf(')');
+
+            if (bracketsStart != -1 && bracketsEnd != -1 && bracketsStart < bracketsEnd)
             {
-                if (fileNameWithoutExt.Length > 3 && fileNameWithoutExt[fileNameWithoutExt.Length - 3] == '(')
+                try
                 {
-                    fileNameWithoutExt = fileNameWithoutExt.Substring(0, fileNameWithoutExt.Length - 3);
+                    return fileName.Substring(0, bracketsStart);
                 }
+                catch (Exception) { }
             }
-            return fileNameWithoutExt;
+
+            return fileName;
         }
 
         /// <summary>
