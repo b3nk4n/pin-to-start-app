@@ -21,6 +21,8 @@ namespace PhotoPin.App.Pages
     {
         private MediaLibrary _mediaLibrary;
 
+        private static readonly Random RANDOM = new Random();
+
         public PinAutomationPage()
         {
             InitializeComponent();
@@ -91,7 +93,11 @@ namespace PhotoPin.App.Pages
 
         private bool SaveAndPinImage(PinableImage image)
         {
-            var imagePath = string.Format("{0}{1}", LiveTileHelper.SHARED_SHELL_CONTENT_PATH, image.FullName);
+            // generate random number, so that each file name is unique, even when we pin a picture multiple times.
+            var randomPrefix = RANDOM.Next(10000);
+            var randomizedFileName = string.Format("{0:0000}_{1}", randomPrefix, image.FullName);
+
+            var imagePath = string.Format("{0}{1}", LiveTileHelper.SHARED_SHELL_CONTENT_PATH, randomizedFileName);
             if (StorageHelper.SaveFileFromStream(imagePath, image.ImageStream))
             {
                 var imageUri = new Uri(StorageHelper.ISTORAGE_SCHEME + imagePath, UriKind.Absolute);
@@ -101,13 +107,15 @@ namespace PhotoPin.App.Pages
                     CycleImages = new List<Uri>() { imageUri, imageUri }
                 };
 
-                var navigationUri = new Uri(string.Format("/Pages/PinAutomationPage.xaml?{0}={1}", AppConstants.PARAM_FILE_NAME, image.FullName), UriKind.Relative);
+                var navigationUri = new Uri(string.Format("/Pages/PinAutomationPage.xaml?{0}={1}",
+                    AppConstants.PARAM_FILE_NAME, randomizedFileName), UriKind.Relative);
                 if (!LiveTileHelper.TileExists(navigationUri))
                 {
                     LiveTilePinningHelper.PinOrUpdateTile(navigationUri, tile, true);
                 }
                 else
                 {
+                    // NOTE: since Version 1.3, we should basically never reach this message
                     MessageBox.Show(AppResources.MessageBoxAlreadyPinned, AppResources.MessageBoxInfo, MessageBoxButton.OK);
                 }
                 return true;
