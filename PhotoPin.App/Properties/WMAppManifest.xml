@@ -6,7 +6,6 @@
     <Language code="it-IT" />
     <Language code="pt-BR" />
     <Language code="pt-PT" />
-    <Language code="fr-FR" />
     <Language code="id-ID" />
     <Language code="pl-PL" />
     <Language code="es-MX" />
@@ -16,7 +15,7 @@
     <Language code="zh-TW" />
     <Language code="ja-JP" />
   </Languages>
-  <App xmlns="" ProductID="{f5b6ecf8-4f10-4ad7-822c-40b1a46a5d1a}" Title="@AppResLib.dll,-100" RuntimeType="Silverlight" Version="1.3.0.0" Genre="apps.normal" Author="PhotoPin.App author" Description="A simple photo hub extension app to add a pin functionality." Publisher="PhotoPin.App" PublisherID="{5cadafe9-bf98-49db-80fd-70805acdb573}">
+  <App xmlns="" ProductID="{f5b6ecf8-4f10-4ad7-822c-40b1a46a5d1a}" Title="@AppResLib.dll,-100" RuntimeType="Silverlight" Version="1.4.0.0" Genre="apps.normal" Author="PhotoPin.App author" Description="A simple photo hub extension app to add a pin functionality." Publisher="PhotoPin.App" PublisherID="{5cadafe9-bf98-49db-80fd-70805acdb573}">
     <IconPath IsRelative="true" IsResource="false">Assets\ApplicationIcon.png</IconPath>
     <Capabilities>
       <Capability Name="ID_CAP_MEDIALIB_PHOTO" />
