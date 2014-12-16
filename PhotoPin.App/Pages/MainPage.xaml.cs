@@ -14,6 +14,8 @@ using System.IO;
 using System.Windows.Threading;
 using PhoneKit.Framework.Core.Storage;
 using PhoneKit.Framework.Core.Tile;
+using PhotoPin.App.Controls;
+using PhoneKit.Framework.Support;
 
 namespace PhotoPin.App.Pages
 {
@@ -43,6 +45,14 @@ namespace PhotoPin.App.Pages
         /// </summary>
         private bool _multipleShowBlocker = false;
 
+        /// <summary>
+        /// Delayed info control loading.
+        /// </summary>
+        private DispatcherTimer _delayedInfoTimer = new DispatcherTimer();
+
+        // the info control with screenshots, which uses lazy loading to improve the startup time.
+        private InfoControl _infoControl;
+
         // Konstruktor
         public MainPage()
         {
@@ -62,6 +72,20 @@ namespace PhotoPin.App.Pages
 
                 var uriString = new Uri(string.Format("/Pages/PinAutomationPage.xaml?{0}={1}", AppConstants.PARAM_SELECTED_FILE_NAME, fileNameToPin), UriKind.Relative);
                 NavigationService.Navigate(uriString);
+            };
+
+            _delayedInfoTimer.Interval = TimeSpan.FromMilliseconds(3000);
+            _delayedInfoTimer.Tick += (s, e) =>
+            {
+                _delayedInfoTimer.Stop();
+
+                if (_infoControl != null)
+                    return;
+
+                _infoControl = new InfoControl();
+                this.LayoutRoot.Children.Add(_infoControl);
+                Grid.SetRow(_infoControl, 0);
+                Grid.SetRowSpan(_infoControl, 2);
             };
 
             // init photo chooser task
@@ -146,6 +170,29 @@ namespace PhotoPin.App.Pages
                 VisualStateManager.GoToState(this, "InfoState", true);
             } else {
                 VisualStateManager.GoToState(this, "NormalState", true);
+            }
+        }
+
+        protected override void OnBackKeyPress(System.ComponentModel.CancelEventArgs e)
+        {
+
+            if (_infoControl != null)
+                e.Cancel = _infoControl.HandleBack();
+
+            base.OnBackKeyPress(e);
+        }
+
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            // fire startup events
+            StartupActionManager.Instance.Fire(e);
+
+            // show info button
+            if (StartupActionManager.Instance.Count <= 15)
+            {
+                _delayedInfoTimer.Start();
             }
         }
     }
