@@ -34,6 +34,15 @@ namespace PhotoPin.App.Pages
         /// </summary>
         private DispatcherTimer _delayedNavigaionTimer = new DispatcherTimer();
 
+        /// <summary>
+        /// Blocks multiple Show() calls, which can rise an Exception:
+        /// <remarks>
+        /// BUGSENSE: 15.12.14 (but in Photo Marker)
+        /// Photo Note (1.0.0.0): Not allowed to call Show() multiple times before an invocation returns
+        /// </remarks>
+        /// </summary>
+        private bool _multipleShowBlocker = false;
+
         // Konstruktor
         public MainPage()
         {
@@ -80,15 +89,12 @@ namespace PhotoPin.App.Pages
             appBarTileButton.Text = AppResources.AppBarCreateTile;
             appBarTileButton.Click += (s, e) =>
             {
-                try
-                {
-                    photoTask.Show();
-                }
-                catch (InvalidOperationException)
-                {
-                    // suppress multiple Show() calls:
-                    // reported via Email error report (24.11.2014)
-                }
+                if (_multipleShowBlocker)
+                    return;
+
+                _multipleShowBlocker = true;
+                photoTask.Show();
+                _multipleShowBlocker = false;
                 
             };
             ApplicationBar.Buttons.Add(appBarTileButton);
@@ -125,7 +131,11 @@ namespace PhotoPin.App.Pages
 
         private void ChoosePhotoClicked(object sender, RoutedEventArgs e)
         {
+            if (_multipleShowBlocker)
+                return;
+            _multipleShowBlocker = true;
             photoTask.Show();
+            _multipleShowBlocker = false;
         }
 
         private void InfoArrowClicked(object sender, RoutedEventArgs e)
